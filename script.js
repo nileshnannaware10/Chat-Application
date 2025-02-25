@@ -1,5 +1,7 @@
 const startBtn = document.getElementById('start-btn');
 const output = document.getElementById('output');
+const clearBtn = document.getElementById('clear-btn');
+const themeBtn = document.getElementById('theme-btn');
 
 // Check if the browser supports the Web Speech API for speech recognition
 if ('webkitSpeechRecognition' in window) {
@@ -21,8 +23,11 @@ if ('webkitSpeechRecognition' in window) {
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript.toLowerCase();
       output.textContent = `You said: ${transcript}`;
-      handleCommand(transcript);
       startBtn.classList.remove('listening');
+      output.innerHTML = `<div class="loading"></div> Processing...`;
+      setTimeout(() => {
+        handleCommand(transcript);
+      }, 1000); // Simulate processing delay
     };
 
     recognition.onerror = (event) => {
@@ -34,12 +39,15 @@ if ('webkitSpeechRecognition' in window) {
     recognition.onend = () => {
       output.textContent = "Listening stopped.";
       startBtn.classList.remove('listening');
+      speak("Goodbye! Let me know if you need anything else.");
     };
 
     function handleCommand(command) {
       let response = "";
 
-      if (command.includes('open youtube')) {
+      if (command.includes('hello')) {
+        response = "Hello, how can I help you today?";
+      } else if (command.includes('open youtube')) {
         response = "Opening YouTube.";
         window.open('https://www.youtube.com', '_blank');
       } else if (command.includes('open google')) {
@@ -55,44 +63,17 @@ if ('webkitSpeechRecognition' in window) {
       } else if (command.includes('what\'s the date') || command.includes('what is the date')) {
         const date = new Date().toLocaleDateString();
         response = `Today's date is ${date}.`;
-      } else if (command.includes('open instagram')) {
-        response = "Opening Instagram.";
-        window.open('https://www.instagram.com', '_blank');
-      } else if (command.includes('open facebook')) {
-        response = "Opening Facebook.";
-        window.open('https://www.facebook.com', '_blank');
-      } else if (command.includes('open spotify')) {
-        response = "Opening Spotify.";
-        window.open('https://www.spotify.com', '_blank');
-      } else if (command.includes('open whatsapp')) {
-        response = "Opening WhatsApp.";
-        window.open('https://web.whatsapp.com', '_blank');
-      } else if (command.includes('open linkedin')) {
-        response = "Opening LinkedIn.";
-        window.open('https://www.linkedin.com', '_blank');
-      } else if (command.includes('open telegram')) {
-        response = "Opening Telegram.";
-        window.open('https://web.telegram.org', '_blank');
-      } else if (command.includes('open gmail')) {
-        response = "Opening Gmail.";
-        window.open('https://mail.google.com', '_blank');
-      } else if (command.includes('open flipkart')) {
-        response = "Opening Flipkart.";
-        window.open('https://www.flipkart.com', '_blank');
-      } else if (command.includes('open amazon')) {
-        response = "Opening Amazon.";
-        window.open('https://www.amazon.com', '_blank');
-      } else if (command.includes('open drive')) {
-        response = "Opening Google Drive.";
-        window.open('https://drive.google.com', '_blank');
-      } else if (command.includes('open discord')) {
-        response = "Opening Discord.";
-        window.open('https://discord.com', '_blank');
+      } else if (command.includes('open calculator')) {
+        response = "Opening Calculator.";
+        window.open('calculator:', '_blank');
+      } else if (command.includes('help')) {
+        response = "Here are some commands you can try: 'Hello', 'Open YouTube', 'Open Google', 'Search for [query]', 'What's the time', 'What's the date', 'Open Calculator'.";
       } else {
         response = `Command not recognized: ${command}`;
       }
 
-      output.textContent = response;
+      output.textContent = "";
+      typeResponse(response, output);
       speak(response);
     }
 
@@ -103,74 +84,49 @@ if ('webkitSpeechRecognition' in window) {
       utterance.pitch = 1; // Pitch of speech
       synth.speak(utterance);
     }
+
+    clearBtn.addEventListener('click', () => {
+      output.textContent = "Your command will appear here...";
+    });
+
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const isLightTheme = document.body.classList.contains('light-theme');
+      themeBtn.innerHTML = `<i class="fas ${isLightTheme ? 'fa-sun' : 'fa-moon'}"></i>`;
+    });
+
+    function typeResponse(text, element) {
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 50); // Adjust typing speed
+    }
+
+    // Function to set the theme based on the time of day
+    function setTheme() {
+      const hour = new Date().getHours();
+      if (hour >= 6 && hour < 18) {
+        document.body.classList.add('light-theme');
+        themeBtn.innerHTML = `<i class="fas fa-sun"></i>`;
+      } else {
+        document.body.classList.remove('light-theme');
+        themeBtn.innerHTML = `<i class="fas fa-moon"></i>`;
+      }
+    }
+
+    // Call the function when the page loads
+    window.onload = () => {
+      setTheme();
+      speak("Hello, I am Jarvis. How can I assist you today?");
+    };
   } else {
     output.textContent = "Your browser does not support speech synthesis.";
   }
 } else {
   output.textContent = "Your browser does not support speech recognition.";
 }
-
-// Greet the user when the page loads
-window.onload = () => {
-  speak("Hello, I am Jarvis. How can I assist you today?");
-};
-
-// Farewell message when the bot stops listening
-recognition.onend = () => {
-  output.textContent = "Listening stopped.";
-  startBtn.classList.remove('listening');
-  speak("Goodbye! Let me know if you need anything else.");
-};
-
-recognition.onresult = (event) => {
-  const transcript = event.results[0][0].transcript.toLowerCase();
-  output.textContent = `You said: ${transcript}`;
-  startBtn.classList.remove('listening');
-  output.innerHTML = `<div class="loading"></div> Processing...`;
-  setTimeout(() => {
-    handleCommand(transcript);
-  }, 1000); // Simulate processing delay
-};
-
-function typeResponse(text, element) {
-  let i = 0;
-  const interval = setInterval(() => {
-    if (i < text.length) {
-      element.textContent += text.charAt(i);
-      i++;
-    } else {
-      clearInterval(interval);
-    }
-  }, 50); // Adjust typing speed
-}
-
-// Modify the handleCommand function to use the typing effect
-function handleCommand(command) {
-  let response = "";
-
-  if (command.includes('open youtube')) {
-    response = "Opening YouTube.";
-    window.open('https://www.youtube.com', '_blank');
-  } 
-  // ... (rest of the commands)
-
-  output.textContent = ""; // Clear previous content
-  typeResponse(response, output);
-  speak(response);
-}
-
-// Function to set the theme based on the time of day
-function setTheme() {
-  const hour = new Date().getHours();
-  if (hour >= 6 && hour < 18) {
-    document.body.classList.add('light-theme');
-  } else {
-    document.body.classList.remove('light-theme');
-  }
-}
-
-// Call the function when the page loads
-window.onload = () => {
-  setTheme();
-  speak("Hello, I am Jarvis. How can I assist you today?");
-};
