@@ -7,6 +7,7 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -17,6 +18,7 @@ body {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   width: 90%;
   max-width: 400px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .avatar {
@@ -39,6 +41,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: background-color 0.3s ease;
 }
 
 #output {
@@ -46,6 +49,7 @@ h1 {
   color: #fff;
   margin-bottom: 15px;
   word-wrap: break-word;
+  transition: color 0.3s ease;
 }
 
 button {
@@ -98,6 +102,7 @@ footer {
   padding: 10px 0;
   font-size: 0.9em;
   border-top: 1px solid #3a3a5a;
+  transition: background-color 0.3s ease, color 0.3s ease, border-top 0.3s ease;
 }
 
 @keyframes spin {
@@ -137,4 +142,13 @@ body.light-theme footer {
   background-color: #f0f0f0;
   color: #000;
   border-top: 1px solid #ccc;
+}
+
+#clear-btn, #theme-btn {
+  background-color: #3a3a5a;
+  margin: 5px;
+}
+
+#clear-btn:hover, #theme-btn:hover {
+  background-color: #4CAF50;
 }
