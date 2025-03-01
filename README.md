@@ -17,7 +17,7 @@ Jarvis-Bot is a simple voice-controlled assistant built using HTML, CSS, and Jav
 ## Supported Commands
 
 - **Open Websites**: "Open YouTube", "Open Google", "Open Instagram", etc.
-- **Search the Web**: "Search for [query]".
+- **Search the Web**: "Search for any [query]".
 - **Get Time and Date**: "What's the time?", "What's the date?".
 
 ## Technologies Used
