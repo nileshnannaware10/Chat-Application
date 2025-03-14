@@ -1,7 +1,7 @@
 
 # Jarvis-Bot
 
-Jarvis-Bot is a simple voice-controlled assistant built using HTML, CSS, and JavaScript. It leverages the Web Speech API to recognize user commands and perform actions such as opening websites, searching the web, and providing the current time and date
+Jarvis-Bot is a simple voice-controlled assistant built using HTML, CSS, and JavaScript. It leverages the Web Speech API to recognize user commands and perform actions such as opening websites, searching the web, and providing the current time and date.
 
 ## Features
 
