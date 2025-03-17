@@ -6,9 +6,9 @@ const themeBtn = document.getElementById('theme-btn');
 // Check if the browser supports the Web Speech API for speech recognition
 if ('webkitSpeechRecognition' in window) {
   const recognition = new webkitSpeechRecognition();
-  recognition.continuous = false; // Stop after one command
-  recognition.interimResults = false; // Only final results
-  recognition.lang = 'en-US'; // Set language
+  recognition.continuous = false; 
+  recognition.interimResults = false; 
+  recognition.lang = 'en-US'; 
 
   // Check if the browser supports the Web Speech API for speech synthesis
   if ('speechSynthesis' in window) {
